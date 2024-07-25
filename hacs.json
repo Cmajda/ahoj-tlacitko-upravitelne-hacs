@@ -1,0 +1,12 @@
+{
+	"name": "Ahoj tlačítko editovatelné",
+	"homeassistant": "2021.12.0",
+	"hacs": "1.28.4",
+	"country": [
+		"CZ",
+		"EN"
+	],
+	"render_readme": true,
+	"filename": "card.js",
+	"content_in_root": true
+}

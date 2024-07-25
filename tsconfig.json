@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2020", // Cíl kompilace
+    "module": "esnext", // Typ modulu
+    "moduleResolution": "node", // Vyřešení modulů podle Node.js
+    "lib": [ "es2020", "dom" ], // Knihovny pro ES2020 a DOM
+    "experimentalDecorators": true, // Povolení experimentálních dekorátor
+    "emitDecoratorMetadata": true, // Emitování metadata pro dekorátory
+    "declaration": true, // Generování souborů .d.ts
+    "outDir": "./dist", // Výstupní adresář pro kompilované soubory
+    "rootDir": "./src", // Kořenový adresář pro zdrojové soubory
+    "strict": true, // Povolení všech přísných kontrol
+    "esModuleInterop": true, // Interoperabilita s CommonJS
+    "skipLibCheck": true, // Přeskočení kontroly typů knihoven
+    "forceConsistentCasingInFileNames": true // Konzistentní velikost písmen ve jménech souborů
+  },
+  "include": [ "src/**/*" ], // Zahrnutí souborů v adresáři src
+  "exclude": [ "node_modules", "**/*.spec.ts" ] // Exkludování node_modules a testovacích souborů
+}
