@@ -1,5 +1,5 @@
 "use strict";
-class AhojTlacitkoUpravitelne extends HTMLElement {
+class AhojTlacitkoUpravitelneHacs extends HTMLElement {
   constructor() {
     super();
     this._elements = {}; // Define initial type of _elements
@@ -187,7 +187,7 @@ class AhojTlacitkoUpravitelne extends HTMLElement {
   }
   // Card configuration
   static getConfigElement() {
-    return document.createElement("ahoj-tlacitko-upravitelne-editor");
+    return document.createElement("ahoj-tlacitko-upravitelne-hacs-editor");
   }
   static getStubConfig() {
     return {
@@ -196,7 +196,7 @@ class AhojTlacitkoUpravitelne extends HTMLElement {
     };
   }
 }
-class AhojTlacitkoUpravitelneEditor extends HTMLElement {
+class AhojTlacitkoUpravitelneHacsEditor extends HTMLElement {
   constructor() {
     super();
     this._elements = {}; // Define initial type of _elements
@@ -302,15 +302,18 @@ class AhojTlacitkoUpravitelneEditor extends HTMLElement {
     this.dispatchEvent(messageEvent);
   }
 }
-customElements.define("ahoj-tlacitko-upravitelne", AhojTlacitkoUpravitelne);
 customElements.define(
-  "ahoj-tlacitko-upravitelne-editor",
-  AhojTlacitkoUpravitelneEditor
+  "ahoj-tlacitko-upravitelne-hacs",
+  AhojTlacitkoUpravitelneHacs
+);
+customElements.define(
+  "ahoj-tlacitko-upravitelne-hacs-editor",
+  AhojTlacitkoUpravitelneHacsEditor
 );
 // Ensure customCards exists
 window.customCards = window.customCards || [];
 window.customCards.push({
-  type: "ahoj-tlacitko-upravitelne",
-  name: "Ahoj tlačítko editor",
+  type: "ahoj-tlacitko-upravitelne-hacs",
+  name: "Ahoj tlačítko edito hacs",
   description: "Turn an entity on and off",
 });

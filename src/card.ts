@@ -367,6 +367,6 @@ customElements.define("ahoj-tlacitko-upravitelne-hacs-editor", AhojTlacitkoUprav
 (window as any).customCards = (window as any).customCards || [];
 (window as any).customCards.push({
   type: "ahoj-tlacitko-upravitelne-hacs",
-  name: "Ahoj tlačítko editor",
+  name: "Ahoj tlačítko edito hacs",
   description: "Turn an entity on and off",
 });
