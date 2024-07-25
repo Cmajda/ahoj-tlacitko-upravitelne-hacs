@@ -1,77 +1,55 @@
-class AhojTlacitkoUpravitelneHacs extends HTMLElement {
-  private _config: any;
-  private _hass: any;
-  private _elements: {
-    card?: HTMLElement;
-    style?: HTMLStyleElement;
-    error?: HTMLElement;
-    dl?: HTMLElement;
-    topic?: HTMLElement;
-    toggle?: HTMLElement;
-    value?: HTMLElement;
-  } = {}; // Define initial type of _elements
-
+"use strict";
+class AhojTlacitkoUpravitelne extends HTMLElement {
   constructor() {
     super();
+    this._elements = {}; // Define initial type of _elements
     this.doCard();
     this.doStyle();
     this.doAttach();
     this.doQueryElements();
     this.doListen();
   }
-
-  setConfig(config: any) {
+  setConfig(config) {
     this._config = config;
     this.doCheckConfig();
     this.doUpdateConfig();
   }
-
-  set hass(hass: any) {
+  set hass(hass) {
     this._hass = hass;
     this.doUpdateHass();
   }
-
   onClicked() {
     this.doToggle();
   }
-
   // Accessors
   isOff() {
     return this.getState().state === "off";
   }
-
   isOn() {
     return this.getState().state === "on";
   }
-
   getHeader() {
     return this._config.header;
   }
-
   getEntityID() {
     return this._config.entity;
   }
-
   getState() {
     return this._hass.states[this.getEntityID()];
   }
-
   getAttributes() {
     return this.getState().attributes;
   }
-
   getName() {
     const friendlyName = this.getAttributes().friendly_name;
     return friendlyName ? friendlyName : this.getEntityID();
   }
-
   // Jobs
   doCheckConfig() {
     if (!this._config.entity) {
       throw new Error("Please define an entity!");
     }
   }
-
   doCard() {
     this._elements.card = document.createElement("ha-card");
     this._elements.card.innerHTML = `
@@ -89,9 +67,8 @@ class AhojTlacitkoUpravitelneHacs extends HTMLElement {
       </div>
     `;
   }
-
   doStyle() {
-    const style = document.createElement("style") as HTMLStyleElement;
+    const style = document.createElement("style");
     style.textContent = `
       .error { color: red; }
       .error--hidden { display: none; }
@@ -135,50 +112,40 @@ class AhojTlacitkoUpravitelneHacs extends HTMLElement {
     `;
     this._elements.style = style; // Ensure correct type assignment
   }
-
   doAttach() {
     this.attachShadow({ mode: "open" });
     if (this._elements.style) {
-      this.shadowRoot!.append(this._elements.style);
+      this.shadowRoot.append(this._elements.style);
     }
     if (this._elements.card) {
-      this.shadowRoot!.append(this._elements.card);
+      this.shadowRoot.append(this._elements.card);
     }
   }
-
   doQueryElements() {
-    const card = this._elements.card as HTMLElement;
-    this._elements.error = card.querySelector(".error") as HTMLElement;
-    this._elements.dl = card.querySelector(".dl") as HTMLElement;
-    this._elements.topic = card.querySelector(".dt") as HTMLElement;
-    this._elements.toggle = card.querySelector(".toggle") as HTMLElement;
-    this._elements.value = card.querySelector(".value") as HTMLElement;
+    const card = this._elements.card;
+    this._elements.error = card.querySelector(".error");
+    this._elements.dl = card.querySelector(".dl");
+    this._elements.topic = card.querySelector(".dt");
+    this._elements.toggle = card.querySelector(".toggle");
+    this._elements.value = card.querySelector(".value");
   }
-
   doListen() {
-    const dl = this._elements.dl as HTMLElement;
+    const dl = this._elements.dl;
     if (dl) {
-      dl.addEventListener(
-        "click",
-        this.onClicked.bind(this),
-        false
-      );
+      dl.addEventListener("click", this.onClicked.bind(this), false);
     }
   }
-
   doUpdateConfig() {
-    const card = this._elements.card as HTMLElement;
+    const card = this._elements.card;
     if (this.getHeader()) {
       card.setAttribute("header", this.getHeader());
     } else {
       card.removeAttribute("header");
     }
   }
-
   doUpdateHass() {
-    const errorElement = this._elements.error as HTMLElement;
-    const dlElement = this._elements.dl as HTMLElement;
-
+    const errorElement = this._elements.error;
+    const dlElement = this._elements.dl;
     if (!this.getState()) {
       if (errorElement) {
         errorElement.textContent = `${this.getEntityID()} is unavailable.`;
@@ -193,10 +160,10 @@ class AhojTlacitkoUpravitelneHacs extends HTMLElement {
         errorElement.classList.add("error--hidden");
       }
       if (this._elements.topic) {
-        (this._elements.topic as HTMLElement).textContent = this.getName();
+        this._elements.topic.textContent = this.getName();
       }
       if (this._elements.toggle) {
-        const toggle = this._elements.toggle as HTMLElement;
+        const toggle = this._elements.toggle;
         if (this.isOff()) {
           toggle.classList.remove("toggle--on");
           toggle.classList.add("toggle--off");
@@ -206,25 +173,22 @@ class AhojTlacitkoUpravitelneHacs extends HTMLElement {
         }
       }
       if (this._elements.value) {
-        (this._elements.value as HTMLElement).textContent = this.getState().state;
+        this._elements.value.textContent = this.getState().state;
       }
       if (dlElement) {
         dlElement.classList.remove("dl--hidden");
       }
     }
   }
-
   doToggle() {
     this._hass.callService("input_boolean", "toggle", {
       entity_id: this.getEntityID(),
     });
   }
-
   // Card configuration
   static getConfigElement() {
-    return document.createElement("ahoj-tlacitko-upravitelne-hacs-editor");
+    return document.createElement("ahoj-tlacitko-upravitelne-editor");
   }
-
   static getStubConfig() {
     return {
       entity: "input_boolean.twgc",
@@ -232,45 +196,32 @@ class AhojTlacitkoUpravitelneHacs extends HTMLElement {
     };
   }
 }
-
-class AhojTlacitkoUpravitelneHacsEditor extends HTMLElement {
-  private _config: any;
-  private _hass: any;
-  private _elements: {
-    header?: HTMLInputElement;
-    entity?: HTMLInputElement;
-    style?: HTMLStyleElement;
-  } = {}; // Define initial type of _elements
-  private _editor: HTMLFormElement;
-
+class AhojTlacitkoUpravitelneEditor extends HTMLElement {
   constructor() {
     super();
+    this._elements = {}; // Define initial type of _elements
     console.log("editor:constructor()");
-    this._editor = document.createElement("form") as HTMLFormElement;
+    this._editor = document.createElement("form");
     this.doEditor();
     this.doStyle();
     this.doAttach();
     this.doQueryElements();
     this.doListen();
   }
-
-  setConfig(config: any) {
+  setConfig(config) {
     console.log("editor:setConfig()");
     this._config = config;
     this.doUpdateConfig();
   }
-
-  set hass(hass: any) {
+  set hass(hass) {
     console.log("editor.hass()");
     this._hass = hass;
     this.doUpdateHass();
   }
-
-  onChanged(event: Event) {
+  onChanged(event) {
     console.log("editor.onChanged()");
     this.doMessageForUpdate(event);
   }
-
   // Jobs
   doEditor() {
     this._editor.innerHTML = `
@@ -284,9 +235,8 @@ class AhojTlacitkoUpravitelneHacsEditor extends HTMLElement {
       </div>
     `;
   }
-
   doStyle() {
-    const style = document.createElement("style") as HTMLStyleElement;
+    const style = document.createElement("style");
     style.textContent = `
       form {
         display: table;
@@ -301,20 +251,17 @@ class AhojTlacitkoUpravitelneHacsEditor extends HTMLElement {
     `;
     this._elements.style = style; // Ensure correct type assignment
   }
-
   doAttach() {
     this.attachShadow({ mode: "open" });
     if (this._elements.style) {
-      this.shadowRoot!.append(this._elements.style);
+      this.shadowRoot.append(this._elements.style);
     }
-    this.shadowRoot!.append(this._editor);
+    this.shadowRoot.append(this._editor);
   }
-
   doQueryElements() {
-    this._elements.header = this._editor.querySelector("#header") as HTMLInputElement;
-    this._elements.entity = this._editor.querySelector("#entity") as HTMLInputElement;
+    this._elements.header = this._editor.querySelector("#header");
+    this._elements.entity = this._editor.querySelector("#entity");
   }
-
   doListen() {
     if (this._elements.header) {
       this._elements.header.addEventListener(
@@ -329,7 +276,6 @@ class AhojTlacitkoUpravitelneHacsEditor extends HTMLElement {
       );
     }
   }
-
   doUpdateConfig() {
     if (this._elements.header) {
       this._elements.header.value = this._config.header;
@@ -338,11 +284,9 @@ class AhojTlacitkoUpravitelneHacsEditor extends HTMLElement {
       this._elements.entity.value = this._config.entity;
     }
   }
-
   doUpdateHass() {}
-
-  doMessageForUpdate(changedEvent: Event) {
-    const target = changedEvent.target as HTMLInputElement;
+  doMessageForUpdate(changedEvent) {
+    const target = changedEvent.target;
     // This _config is readonly, so we need to copy it
     const newConfig = { ...this._config };
     if (target.id === "header") {
@@ -358,15 +302,15 @@ class AhojTlacitkoUpravitelneHacsEditor extends HTMLElement {
     this.dispatchEvent(messageEvent);
   }
 }
-
-
-customElements.define("ahoj-tlacitko-upravitelne-hacs", AhojTlacitkoUpravitelneHacs);
-customElements.define("ahoj-tlacitko-upravitelne-hacs-editor", AhojTlacitkoUpravitelneHacsEditor);
-
+customElements.define("ahoj-tlacitko-upravitelne", AhojTlacitkoUpravitelne);
+customElements.define(
+  "ahoj-tlacitko-upravitelne-editor",
+  AhojTlacitkoUpravitelneEditor
+);
 // Ensure customCards exists
-(window as any).customCards = (window as any).customCards || [];
-(window as any).customCards.push({
-  type: "ahoj-tlacitko-upravitelne-hacs",
+window.customCards = window.customCards || [];
+window.customCards.push({
+  type: "ahoj-tlacitko-upravitelne",
   name: "Ahoj tlačítko editor",
   description: "Turn an entity on and off",
 });
